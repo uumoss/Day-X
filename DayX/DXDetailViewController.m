@@ -8,6 +8,10 @@
 
 #import "DXDetailViewController.h"
 
+static NSString * const entryKey = @"entry";
+static NSString * const titleKey = @"title";
+static NSString * const textKey = @"text";
+
 @interface DXDetailViewController () <UITextFieldDelegate, UITextViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UITextField *textField;
@@ -27,13 +31,26 @@
     return self;
 }
 
+
+-(void)updateWithDictionary:(NSDictionary *)dictionary {
+    self.textField.text = dictionary[titleKey];
+    self.textView.text = dictionary[textKey];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.title = @"Day-X";
-    self.textField.delegate = self;
+    
     self.textView.delegate = self;
+    self.textField.delegate = self;
+    
+    NSDictionary *entry = [[NSUserDefaults standardUserDefaults] objectForKey:entryKey];
+    [self updateWithDictionary:entry];
+    
 }
+
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
     [self.textField resignFirstResponder];
@@ -43,6 +60,22 @@
 - (IBAction)clearButtonPressed:(id)sender {
     self.textView.text = @"";
     self.textField.text = @"";
+}
+
+- (IBAction)save:(id)sender{
+    NSDictionary *entry = @{titleKey: self.textField.text, textKey: self.textView.text};
+    [[NSUserDefaults standardUserDefaults] setObject:entry forKey:entryKey];
+    NSLog(@"Save");
+
+}
+
+-(void)textFieldDidEndEditing:(UITextField *)textField {
+    [self save:textField];
+    
+}
+
+-(void)textViewDidChange:(UITextView *)textView {
+    [self save:textView];
 }
 
 
