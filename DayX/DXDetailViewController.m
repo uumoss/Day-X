@@ -63,8 +63,8 @@ static NSString * const textKey = @"text";
 }
 
 - (IBAction)save:(id)sender{
-    NSDictionary *entry = @{titleKey: self.textField.text, textKey: self.textView.text};
-    [[NSUserDefaults standardUserDefaults] setObject:entry forKey:entryKey];
+    NSDictionary *content = @{titleKey: self.textField.text, textKey: self.textView.text};
+    [[NSUserDefaults standardUserDefaults] setObject:content forKey:entryKey];
     NSLog(@"Save");
 
 }
